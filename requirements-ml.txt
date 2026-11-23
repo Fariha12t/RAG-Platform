@@ -1,0 +1,3 @@
+# Optional: production-quality semantic retrieval + reranking (large downloads)
+sentence-transformers>=3.0
+faiss-cpu>=1.8

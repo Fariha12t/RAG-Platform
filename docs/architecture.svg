@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 680" font-family="Segoe UI,Helvetica,Arial,sans-serif">
+<rect width="700" height="680" fill="#ffffff"/>
+<defs><marker id="a" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0,0 L9,4 L0,8 z" fill="#1F4E79"/></marker></defs>
+<rect x="70" y="30" width="560" height="64" rx="10" fill="#EAF1F8" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="57" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">Document Upload</text>
+<text x="350.0" y="78" text-anchor="middle" font-size="12" fill="#333">PDF • DOCX • TXT • scanned images (OCR)</text>
+<line x1="350.0" y1="94" x2="350.0" y2="118" stroke="#1F4E79" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="70" y="120" width="560" height="64" rx="10" fill="#EAF1F8" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="147" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">Document Processing</text>
+<text x="350.0" y="168" text-anchor="middle" font-size="12" fill="#333">Extraction • Cleaning • Page-aware chunking • Injection scan</text>
+<line x1="350.0" y1="184" x2="350.0" y2="208" stroke="#1F4E79" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="70" y="210" width="560" height="64" rx="10" fill="#EAF1F8" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="237" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">Embedding Generation</text>
+<text x="350.0" y="258" text-anchor="middle" font-size="12" fill="#333">Sentence Transformers / OpenAI / offline hashing</text>
+<line x1="350.0" y1="274" x2="350.0" y2="298" stroke="#1F4E79" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="70" y="300" width="560" height="64" rx="10" fill="#EAF1F8" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="327" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">Vector Store + Metadata</text>
+<text x="350.0" y="348" text-anchor="middle" font-size="12" fill="#333">FAISS/NumPy index • PostgreSQL (docs, chunks, users, usage)</text>
+<line x1="350.0" y1="364" x2="350.0" y2="388" stroke="#1F4E79" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="70" y="390" width="560" height="64" rx="10" fill="#EAF1F8" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="417" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">Retrieval System</text>
+<text x="350.0" y="438" text-anchor="middle" font-size="12" fill="#333">Hybrid: dense + BM25 → RRF fusion → Reranking</text>
+<line x1="350.0" y1="454" x2="350.0" y2="478" stroke="#1F4E79" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="70" y="480" width="560" height="64" rx="10" fill="#FFF4E0" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="507" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">Guardrails</text>
+<text x="350.0" y="528" text-anchor="middle" font-size="12" fill="#333">Access control • Untrusted-source sanitising</text>
+<line x1="350.0" y1="544" x2="350.0" y2="568" stroke="#1F4E79" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="70" y="570" width="560" height="64" rx="10" fill="#E8F3EA" stroke="#1F4E79" stroke-width="1.5"/>
+<text x="350.0" y="597" text-anchor="middle" font-size="16" font-weight="700" fill="#1F4E79">LLM Response</text>
+<text x="350.0" y="618" text-anchor="middle" font-size="12" fill="#333">Grounded answer • [n] citations • token & cost tracking</text>
+</svg>
