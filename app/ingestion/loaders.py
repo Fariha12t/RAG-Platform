@@ -10,6 +10,7 @@ from typing import Optional
 from app.config import get_settings
 
 log = logging.getLogger(__name__)
+logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".png", ".jpg", ".jpeg", ".tiff"}
 
