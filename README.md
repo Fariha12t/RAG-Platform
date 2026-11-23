@@ -173,6 +173,4 @@ vector DB) behind `app/retrieval/index.py`.
 4. Sign in as `bob` -> only *HR & Policies* is visible; other collections return 404.
 5. **Usage** tab -> tokens and cost; **Documents** tab -> delete and re-index a file.
 
-## License
 
-MIT
