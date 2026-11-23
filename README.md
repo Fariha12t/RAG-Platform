@@ -47,6 +47,24 @@ evaluation/       QA dataset, metrics, run_eval.py, results/
 scripts/          sample-document generator, demo seeding
 tests/            pytest suite (core + API + security)
 ```
+## Screenshots
+
+### Chat with grounded answers and citations
+![Chat](docs/screenshots/chat.png)
+
+### Document management (upload, preview, re-index, delete)
+![Documents](docs/screenshots/documents.png)
+
+<details>
+<summary>More screenshots</summary>
+
+### Collections, sharing and admin
+![Collections](docs/screenshots/collections.png)
+
+### Token and cost tracking
+![Usage](docs/screenshots/usage.png)
+
+</details>
 
 ## Quick start (no API keys needed)
 
