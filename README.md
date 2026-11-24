@@ -131,19 +131,51 @@ curl -s -X POST localhost:8000/chat -H "X-API-Key: dev-admin-key" -H "Content-Ty
 python -m evaluation.run_eval          # writes evaluation/results/results.{json,md}
 ```
 
-Dataset (`evaluation/qa_dataset.jsonl`): 30 answerable questions (factual, comparison, policy, lookup, summary, manual),
-3 unanswerable, 2 prompt-injection probes, each with expected source documents and evidence snippets.
+**Dataset** (`evaluation/qa_dataset.jsonl`): 30 answerable questions (factual, comparison, policy, lookup, summary, manual), 3 unanswerable and 2 prompt-injection probes. Each has expected source documents and evidence snippets.
 
-* **Recall@K** - share of required evidence snippets found in the top-K retrieved chunks of the expected documents.
-* **MRR** - 1 / rank of the first chunk containing evidence.
-* **Groundedness** - a sentence counts as grounded if >=80% of its content tokens appear in the source(s) it cites (uncited = ungrounded). This is a *lexical heuristic*; use an LLM judge for production.
-* **Citation accuracy** - share of cited sources that belong to an expected document.
+**Metrics**
+- **Recall@K**: share of required evidence snippets found in the top-K chunks of the expected documents.
+- **MRR**: 1 / rank of the first chunk containing evidence.
+- **Groundedness**: a sentence is grounded if at least 80% of its content tokens appear in the source it cites (lexical heuristic).
+- **Citation accuracy**: share of cited sources that belong to an expected document.
 
-Latest offline run (hashing embeddings, lexical reranker, extractive answers) is in
-[`evaluation/results/results.md`](evaluation/results/results.md). Honest caveats: the corpus is small (9 documents, 31 chunks) and
-all queries share vocabulary with their evidence, so the four retrieval modes score alike here and the extractive answerer
-abstains poorly on unanswerable questions. Hybrid/rerank gains show up on larger, messier corpora and with real
-embeddings - re-run with the production settings above and add your own documents/questions to `qa_dataset.jsonl`.
+### Results (offline baseline: hashing embeddings, lexical reranker, extractive answers)
+
+Corpus: 9 documents, 31 chunks.
+
+| Mode | Recall@1 | Recall@3 | Recall@5 | MRR | Latency (ms/query) |
+|---|---|---|---|---|---|
+| dense | 0.917 | 0.983 | 0.983 | 0.983 | 0.8 |
+| bm25 | 0.917 | 0.983 | 0.983 | 0.983 | 0.16 |
+| hybrid | 0.917 | 0.983 | 0.983 | 0.983 | 0.23 |
+| hybrid + rerank | 0.917 | 0.983 | 0.983 | 0.983 | 1.74 |
+
+| Answer metric | Score |
+|---|---|
+| Groundedness | 1.000 |
+| Citation accuracy | 0.844 |
+| Answers with a citation | 1.000 |
+| Keyword accuracy | 0.967 |
+| Abstention on unanswerable questions | 0.333 |
+| Prompt-injection resistance | 1.000 |
+
+**Reading these results honestly:** the corpus is small and the questions share vocabulary with their evidence, so all four retrieval modes score the same. The extractive answerer abstains poorly (0.333) because it has no language understanding. Hybrid search and reranking should show gains on larger, messier corpora and with semantic embeddings. Full details are in [`evaluation/results/results.md`](evaluation/results/results.md).
+
+### Production-style run
+
+```bash
+pip install -r requirements-ml.txt
+# .env: EMBEDDING_BACKEND=sbert  RERANKER_BACKEND=cross-encoder  LLM_PROVIDER=anthropic
+python -m evaluation.run_eval
+```
+
+## Roadmap
+
+- [ ] Evaluation with Sentence Transformers, a cross-encoder reranker and an LLM (Claude or OpenAI)
+- [ ] LLM-as-judge groundedness
+- [ ] pgvector backend for multi-worker deployments
+- [ ] Deploy to AWS (ECS Fargate and RDS) or Azure Container Apps
+- [ ] Optional LangGraph agentic flow for multi-step questions.
 
 ## Security design
 

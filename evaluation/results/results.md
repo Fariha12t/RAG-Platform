@@ -7,10 +7,10 @@ Corpus: 9 documents / 31 chunks. Questions: 30 answerable, 3 unanswerable, 2 pro
 
 | Mode | Recall@1 | Recall@3 | Recall@5 | MRR | DocHit@5 | Latency (ms/query) |
 |---|---|---|---|---|---|---|
-| dense | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 0.41 |
-| bm25 | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 0.22 |
-| hybrid | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 0.45 |
-| hybrid_rerank | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 2.85 |
+| dense | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 0.8 |
+| bm25 | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 0.16 |
+| hybrid | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 0.23 |
+| hybrid_rerank | 0.917 | 0.983 | 0.983 | 0.983 | 1.000 | 1.74 |
 
 ## Answer quality (hybrid + rerank, top-5)
 
