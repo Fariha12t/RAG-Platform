@@ -4,7 +4,7 @@ An AI-powered enterprise knowledge assistant. Upload PDFs, Word files, text and 
 questions in natural language and get **grounded answers with page-level citations**.
 
 Built end-to-end: ingestion pipeline (with OCR) -> hybrid retrieval + reranking -> LLM answers -> REST API ->
-Streamlit UI -> evaluation harness -> Docker. It runs **fully offline with no API keys** (for demos/CI) and upgrades to
+Streamlit UI -> evaluation harness. It runs **fully offline with no API keys** (for demos/CI) and upgrades to
 Anthropic/OpenAI + Sentence Transformers with a few environment variables.
 
 ![Architecture](docs/architecture.svg)
@@ -17,7 +17,7 @@ Anthropic/OpenAI + Sentence Transformers with a few environment variables.
 | **RAG** | Pluggable embeddings (Sentence Transformers, OpenAI, offline hashing) · vector index (NumPy or FAISS) · semantic search · **hybrid search** (dense + BM25, Reciprocal Rank Fusion) · **reranking** (cross-encoder or lexical) · grounded generation with `[n]` citations |
 | **Application** | Chat UI · source citations with document previews · conversation history · multiple collections · document delete / re-index · usage dashboard |
 | **Security** | **Access control** (API keys, owner/admin/shared read access; unreadable collections return 404) · **prompt-injection protection** (ingestion-time flagging, sentence redaction, delimiter neutralisation, hardened system prompt) |
-| **Ops** | **Cost tracking** (tokens + USD per request, per model, per user) · Docker + docker-compose (PostgreSQL) · GitHub Actions CI · pytest suite |
+| **Ops** | **Cost tracking** (tokens + USD per request, per model, per user) · optional PostgreSQL via `DATABASE_URL` · GitHub Actions CI · pytest suite |
 | **Evaluation** | 35-question dataset with expected documents + evidence · **Recall@K, MRR** per retrieval mode · groundedness, citation accuracy, keyword accuracy, abstention, injection resistance |
 
 ## Architecture
@@ -79,15 +79,7 @@ streamlit run ui/streamlit_app.py         # UI        -> http://localhost:8501  
 ```
 
 Local OCR needs the Tesseract and Poppler binaries (`apt install tesseract-ocr poppler-utils` / `brew install tesseract poppler`);
-Docker images include them. Without them, scanned pages are skipped with a warning.
-
-### Docker
-
-```bash
-cp .env.example .env
-docker compose up --build            # PostgreSQL + API (:8000) + UI (:8501)
-docker compose exec api python -m scripts.seed_demo
-```
+Without them, scanned pages are skipped with a warning.
 
 ### Production-quality models
 
@@ -174,21 +166,18 @@ python -m evaluation.run_eval
 - [ ] Evaluation with Sentence Transformers, a cross-encoder reranker and an LLM (Claude or OpenAI)
 - [ ] LLM-as-judge groundedness
 - [ ] pgvector backend for multi-worker deployments
-- [ ] Deploy to AWS (ECS Fargate and RDS) or Azure Container Apps
+- [ ] Deploy to AWS or Azure
 - [ ] Optional LangGraph agentic flow for multi-step questions.
 
 ## Security design
 
 * **Access control:** per-collection ownership + explicit shares; admins see everything; other users get `404` (not `403`) for collections they cannot read.
 * **Prompt injection:** document text is treated as untrusted data. Chunks are scanned at ingestion (flagged in the UI), instruction-like sentences are redacted before prompting, our `<source>` delimiters are neutralised, and the system prompt forbids obeying source text.
-* **Secrets:** API keys are stored hashed (SHA-256); change `ADMIN_API_KEY` and `POSTGRES_PASSWORD` before deploying.
+* **Secrets:** API keys are stored hashed (SHA-256); change `ADMIN_API_KEY` before deploying.
 
-## Deploying to AWS / Azure
+## Deployment notes
 
-The stack is container-native: push the image to ECR / ACR, run the API and UI on ECS Fargate / Azure Container Apps,
-use RDS / Azure Database for PostgreSQL for `DATABASE_URL`, and mount EFS / Azure Files at `DATA_DIR` for uploads.
-The in-memory index assumes one API worker; for horizontal scaling move vectors to **pgvector** (or another shared
-vector DB) behind `app/retrieval/index.py`.
+The API and UI run as plain Python processes (`uvicorn`, `streamlit`) and can be hosted on any VM or PaaS. Set `DATABASE_URL` to a PostgreSQL instance for multi-user use. The in-memory index assumes one API worker; for horizontal scaling move vectors to **pgvector** (or another shared vector DB) behind `app/retrieval/index.py`.
 
 ## Design notes & limitations
 
